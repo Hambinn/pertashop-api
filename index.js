@@ -1,6 +1,10 @@
 const express = require('express')
+const bodyParser = require('body-parser')
 const app = express()
 const port = 3000
+const {db} = require('./firebase')
+app.use(express.json())
+app.use(bodyParser.json())
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
@@ -8,21 +12,17 @@ app.get('/', (req, res) => {
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
-})
+})   
 
-var admin = require("firebase-admin");
-var serviceAccount = require("./serviceAccountKeys.json");
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-})
-
-const db = admin.firestore();
-
-let customers = db.collection('Customers');
-
-customers.get().then((snapshot) => {
-  snapshot.forEach(document =>{
-    console.log(document.id, '=>', document.data());
-  })
+app.post('/createUser',async (req,res)=>{
+    const {name,email,password} = req.body
+    const accountRef = db.collection('Account').doc("30")
+    const account = await accountRef.set({
+        name,
+        email,
+        password
+    })
+    res.send('200')
+    
+    console.log(req.body)
 })
