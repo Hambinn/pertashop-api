@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 const port = 3000;
 const authRoutes = require("./Routes/AuthRoutes");
 const cookieParser = require("cookie-parser");
-
+require("dotenv").config();
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -21,10 +21,11 @@ app.use(
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
+  console.log(process.env.MONGODB_URI);
 });
 
 mongoose
-  .connect("mongodb://localhost:27017/portashop", {
+  .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

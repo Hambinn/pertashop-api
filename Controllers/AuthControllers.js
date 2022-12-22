@@ -10,10 +10,10 @@ const createToken = (id) => {
 };
 
 const handleErrors = (err) => {
-  let errors = { email: "", password: "" };
+  let errors = { username: "", password: "" };
 
-  if (err.message === "Incorrect Email") {
-    errors.email = "That email is not registered";
+  if (err.message === "Incorrect username") {
+    errors.username = "That username is not registered";
   }
 
   if (err.message === "Incorrect Password") {
@@ -21,7 +21,7 @@ const handleErrors = (err) => {
   }
 
   if (err.code === 11000) {
-    errors.email = "Email already exists";
+    errors.username = "username already exists";
     return errors;
   }
   if (err.message.includes("Users validation failed")) {
@@ -34,8 +34,8 @@ const handleErrors = (err) => {
 
 module.exports.register = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
-    const user = await UserModel.create({ email, password });
+    const { username, password } = req.body;
+    const user = await UserModel.create({ username, password });
     const token = createToken(user._id);
 
     res.cookie("jwt", token, {
@@ -53,8 +53,8 @@ module.exports.register = async (req, res, next) => {
 
 module.exports.login = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
-    const user = await UserModel.login(email, password);
+    const { username, password } = req.body;
+    const user = await UserModel.login(username, password);
     const token = createToken(user._id);
 
     res.cookie("jwt", token, {

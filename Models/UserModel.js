@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const userSchema = new mongoose.Schema({
-  email: {
+  username: {
     type: String,
-    required: [true, "Email is Required"],
+    required: [true, "username is Required"],
     unique: true,
   },
   password: {
@@ -18,8 +18,8 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-userSchema.statics.login = async function (email, password) {
-  const user = await this.findOne({ email });
+userSchema.statics.login = async function (username, password) {
+  const user = await this.findOne({ username });
   if (user) {
     const auth = await bcrypt.compare(password, user.password);
     if (auth) {
@@ -27,7 +27,7 @@ userSchema.statics.login = async function (email, password) {
     }
     throw Error("Incorrect Password");
   }
-  throw Error("Incorrect Email");
+  throw Error("Incorrect username");
 };
 
 module.exports = mongoose.model("Users", userSchema);
