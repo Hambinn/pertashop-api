@@ -11,7 +11,15 @@ module.exports.inputPenjualan = async (req, res, next) => {
       penjualanMember,
       stik,
     } = req.body;
-    res.send("input penjualan");
+    res.json({
+      tanggal: tanggal,
+      meteranAwal: meteranAwal,
+      meteranAkhir: meteranAkhir,
+      penjualanBukanMember: penjualanBukanMember,
+      penjualanDiantar: penjualanDiantar,
+      penjualanMember: penjualanMember,
+      stik: stik,
+    });
   } catch (err) {
     console.log(err);
   }
