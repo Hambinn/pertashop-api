@@ -23,3 +23,19 @@ module.exports.checkUser = (req, res, next) => {
     next();
   }
 };
+
+module.exports.checkInput = (req, res, next) => {
+  const token = req.cookies.jwt;
+  if (token) {
+    jwt.verify(token, "secret", (err, decodedToken) => {
+      if (err) {
+        res.json({ status: false });
+        next();
+      } else {
+        res.json({ idUser: decodedToken.id });
+      }
+    });
+  } else {
+    res.json({ status: false });
+  }
+};
