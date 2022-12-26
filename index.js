@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const port = 3000;
 const authRoutes = require("./Routes/AuthRoutes");
 const inputPenjualanRoutes = require("./Routes/InputPenjualanRoutes");
+const penjualanManagerRoutes = require("./Routes/PenjualanManagerRoutes");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
 app.use(express.json());
@@ -39,3 +40,4 @@ mongoose
 
 app.use("/", authRoutes);
 app.use("/", inputPenjualanRoutes);
+app.use("/", penjualanManagerRoutes);
