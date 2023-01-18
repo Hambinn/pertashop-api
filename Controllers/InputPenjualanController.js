@@ -1,5 +1,6 @@
 const authentication = require("../Models/SheetsModels");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 module.exports.inputPenjualan = async (req, res, next) => {
   try {
@@ -13,8 +14,11 @@ module.exports.inputPenjualan = async (req, res, next) => {
       penjualanMember,
       stik,
       userId,
+      shift,
+      penjualanId,
     } = req.body;
-
+    const hashPenjualan = await bcrypt.hash(penjualanId.toString(), 10);
+    const stringHash = hashPenjualan.toString();
     const writeReq = await sheets.spreadsheets.values.append({
       spreadsheetId: process.env.SPREADSHEET_ID,
       range: "Sheet1",
@@ -30,6 +34,8 @@ module.exports.inputPenjualan = async (req, res, next) => {
             penjualanMember,
             stik,
             userId,
+            shift,
+            stringHash,
           ],
         ],
       },
