@@ -24,7 +24,7 @@ module.exports.getSheetsList = async (req, res, next) => {
         spreadsheetId: process.env.SPREADSHEET_ID,
         });
       const list_sheets = []
-      for (let i = 1; i < readReq.data.sheets.length; i++) {
+      for (let i = 2; i < readReq.data.sheets.length; i++) {
         list_sheets.push(readReq.data.sheets[i].properties.title);
         }
       res.send(list_sheets);
