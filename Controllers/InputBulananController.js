@@ -128,3 +128,73 @@ module.exports.getStikAwal = async (req, res, next) => {
     res.status(500).send();
   }
 };
+
+module.exports.addNewSheet = async (req, res, next) => {
+  const sheet = req.body.sheet;
+  try {
+    const { sheets } = await authentication();
+    const writeReq = await sheets.spreadsheets.batchUpdate({
+      spreadsheetId: process.env.SPREADSHEET_ID,
+      resource: {
+        requests: [
+          {
+            addSheet: {
+              properties: {
+                title: sheet
+              },
+            },
+          },
+        ],
+      },
+    });
+    res.json(writeReq.data);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send();
+  }
+}
+
+module.exports.addNewValueSheet = async (req, res, next) => {
+  try {
+    const sheet = req.body.sheet;
+    const { sheets } = await authentication();
+    const writeReq = await sheets.spreadsheets.values.append({
+    spreadsheetId: process.env.SPREADSHEET_ID,
+    range: sheet,
+    valueInputOption: "USER_ENTERED",
+    resource: {
+        values: [
+          [
+            "Tanggal",
+            "Terima BBM",
+            "Tera",
+            "Stan Awal",
+            "Stan Akhir",
+            "Omset",
+            "Stik Awal cm",
+            "Stik Awal lt",
+            "Stik Akhir cm",
+            "Stik Akhir lt",
+            "Lossis Harian lt",
+            "Lossis Harian Rp",
+            "Penjualan Retail",
+            "Penjualan Jerigen",
+            "13900",
+            "13800",
+            "Jumlah"
+          ],
+        ],
+      },
+    });
+
+    if (writeReq.status === 200) {
+      return res.json();
+    } else {
+      return res.json({ msg: "Update failed" });
+    }
+  } catch (error) {
+    console.log("Error updating spreadsheet");
+    console.log(error);
+    res.status(500).send();
+  }
+};
